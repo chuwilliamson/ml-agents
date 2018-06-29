@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using MLAgents;
 
@@ -34,7 +33,7 @@ public class HallwayAgent : Agent
     {
         if (useVectorObs)
         {
-            float rayDistance = 12f;
+            var rayDistance = 12f;
             float[] rayAngles = { 20f, 60f, 90f, 120f, 160f };
             string[] detectableObjects = { "orangeGoal", "redGoal", "orangeBlock", "redBlock", "wall" };
             AddVectorObs(GetStepCount() / (float)agentParameters.maxStep);
@@ -52,8 +51,8 @@ public class HallwayAgent : Agent
     public void MoveAgent(float[] act)
     {
 
-        Vector3 dirToGo = Vector3.zero;
-        Vector3 rotateDir = Vector3.zero;
+        var dirToGo = Vector3.zero;
+        var rotateDir = Vector3.zero;
 
         if (brain.brainParameters.vectorActionSpaceType == SpaceType.continuous)
         {
@@ -62,7 +61,7 @@ public class HallwayAgent : Agent
         }
         else
         {
-            int action = Mathf.FloorToInt(act[0]);
+            var action = Mathf.FloorToInt(act[0]);
             switch (action)
             {
                 case 0:
@@ -110,8 +109,8 @@ public class HallwayAgent : Agent
 
     public override void AgentReset()
     {
-        float agentOffset = -15f;
-        float blockOffset = 0f;
+        var agentOffset = -15f;
+        var blockOffset = 0f;
         selection = Random.Range(0, 2);
         if (selection == 0)
         {
@@ -138,7 +137,7 @@ public class HallwayAgent : Agent
         transform.rotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
         agentRB.velocity *= 0f;
 
-        int goalPos = Random.Range(0, 2);
+        var goalPos = Random.Range(0, 2);
         if (goalPos == 0)
         {
             orangeGoal.transform.position = new Vector3(7f, 0.5f, 9f) + area.transform.position;

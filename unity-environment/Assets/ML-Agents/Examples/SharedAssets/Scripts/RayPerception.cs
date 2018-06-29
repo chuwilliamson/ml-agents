@@ -30,7 +30,7 @@ namespace MLAgents
             perceptionBuffer.Clear();
             // For each ray sublist stores categorial information on detected object
             // along with object distance.
-            foreach (float angle in rayAngles)
+            foreach (var angle in rayAngles)
             {
                 endPosition = transform.TransformDirection(
                     PolarToCartesian(rayDistance, angle));
@@ -41,12 +41,12 @@ namespace MLAgents
                         endPosition, Color.black, 0.01f, true);
                 }
 
-                float[] subList = new float[detectableObjects.Length + 2];
+                var subList = new float[detectableObjects.Length + 2];
                 if (Physics.SphereCast(transform.position +
                                        new Vector3(0f, startOffset, 0f), 0.5f,
                     endPosition, out hit, rayDistance))
                 {
-                    for (int i = 0; i < detectableObjects.Length; i++)
+                    for (var i = 0; i < detectableObjects.Length; i++)
                     {
                         if (hit.collider.gameObject.CompareTag(detectableObjects[i]))
                         {
@@ -72,8 +72,8 @@ namespace MLAgents
         /// </summary>
         public static Vector3 PolarToCartesian(float radius, float angle)
         {
-            float x = radius * Mathf.Cos(DegreeToRadian(angle));
-            float z = radius * Mathf.Sin(DegreeToRadian(angle));
+            var x = radius * Mathf.Cos(DegreeToRadian(angle));
+            var z = radius * Mathf.Sin(DegreeToRadian(angle));
             return new Vector3(x, 0f, z);
         }
 

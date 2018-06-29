@@ -23,10 +23,10 @@ public class GridAgent : Agent
     public override void AgentAction(float[] vectorAction, string textAction)
     {
         AddReward(-0.01f);
-        int action = Mathf.FloorToInt(vectorAction[0]);
+        var action = Mathf.FloorToInt(vectorAction[0]);
 
         // 0 - Forward, 1 - Backward, 2 - Left, 3 - Right
-        Vector3 targetPos = transform.position;
+        var targetPos = transform.position;
         if (action == 3)
         {
             targetPos = transform.position + new Vector3(1f, 0, 0f);
@@ -47,7 +47,7 @@ public class GridAgent : Agent
             targetPos = transform.position + new Vector3(0f, 0, -1f);
         }
 
-        Collider[] blockTest = Physics.OverlapBox(targetPos, new Vector3(0.3f, 0.3f, 0.3f));
+        var blockTest = Physics.OverlapBox(targetPos, new Vector3(0.3f, 0.3f, 0.3f));
         if (blockTest.Where(col => col.gameObject.tag == "wall").ToArray().Length == 0)
         {
             transform.position = targetPos;

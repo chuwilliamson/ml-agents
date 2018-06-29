@@ -1,11 +1,7 @@
 using Grpc.Core;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-using UnityEngine;
 using MLAgents.CommunicatorObjects;
 
 namespace MLAgents

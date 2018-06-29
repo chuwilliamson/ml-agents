@@ -1,14 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-using System;
-
-namespace MLAgents
+﻿namespace MLAgents
 {
-
+/// <summary>
+/// Contains exceptions specific to ML-Agents.
+/// </summary>
     [System.Serializable]
-    /// Contains exceptions specific to ML-Agents.
     public class UnityAgentsException : System.Exception
     {
         /// When a UnityAgentsException is called, the timeScale is set to 0.

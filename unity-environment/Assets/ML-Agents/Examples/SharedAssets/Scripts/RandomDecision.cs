@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using MLAgents;
 
 namespace MLAgents
 {
@@ -28,9 +27,9 @@ namespace MLAgents
         {
             if (actionSpaceType == SpaceType.continuous)
             {
-                List<float> act = new List<float>();
+                var act = new List<float>();
 
-                for (int i = 0; i < actionSpaceSize; i++)
+                for (var i = 0; i < actionSpaceSize; i++)
                 {
                     act.Add(2 * Random.value - 1);
                 }

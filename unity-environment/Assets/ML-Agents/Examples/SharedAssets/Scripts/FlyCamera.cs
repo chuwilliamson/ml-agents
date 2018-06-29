@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 
 namespace MLAgents
 {
@@ -59,7 +58,7 @@ namespace MLAgents
             }
 
             // Keyboard commands
-            Vector3 p = GetBaseInput();
+            var p = GetBaseInput();
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 totalRun += Time.deltaTime;
@@ -75,7 +74,7 @@ namespace MLAgents
             }
 
             p = p * Time.deltaTime;
-            Vector3 newPosition = transform.position;
+            var newPosition = transform.position;
             if (Input.GetKey(KeyCode.Space)
                 || (movementStaysFlat && !(rotateOnlyIfMousedown && Input.GetMouseButton(1))))
             {
@@ -95,7 +94,7 @@ namespace MLAgents
         private Vector3 GetBaseInput()
         {
             // returns the basic values, if it's 0 than it's not active.
-            Vector3 p_Velocity = new Vector3();
+            var p_Velocity = new Vector3();
             if (Input.GetKey(KeyCode.W))
             {
                 p_Velocity += new Vector3(0, 0, 1);

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using MLAgents;
 
@@ -29,13 +27,13 @@ public class BouncerAgent : Agent {
 
     public override void AgentAction(float[] vectorAction, string textAction)
 	{
-	    for (int i = 0; i < vectorAction.Length; i++)
+	    for (var i = 0; i < vectorAction.Length; i++)
 	    {
 	        vectorAction[i] = Mathf.Clamp(vectorAction[i], -1f, 1f);
 	    }
-        float x = vectorAction[0];
-        float y = ScaleAction(vectorAction[1], 0, 1);
-        float z = vectorAction[2];
+        var x = vectorAction[0];
+        var y = ScaleAction(vectorAction[1], 0, 1);
+        var z = vectorAction[2];
         rb.AddForce( new Vector3(x, y+1, z) * strength);
 
         AddReward(-0.05f * (
@@ -52,10 +50,10 @@ public class BouncerAgent : Agent {
         gameObject.transform.localPosition = new Vector3(
             (1 - 2 * Random.value) *5, 2, (1 - 2 * Random.value)*5);
         rb.velocity = default(Vector3);
-        GameObject environment = gameObject.transform.parent.gameObject;
-        BouncerBanana[] bananas = 
+        var environment = gameObject.transform.parent.gameObject;
+        var bananas = 
             environment.GetComponentsInChildren<BouncerBanana>();
-        foreach (BouncerBanana bb in bananas)
+        foreach (var bb in bananas)
         {
             bb.Respawn();
         }

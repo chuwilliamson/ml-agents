@@ -12,53 +12,53 @@ namespace MLAgents
     {
         /// <summary>
         /// The type of monitor the information must be displayed in.
-        /// <slider> corresponds to a single rectangle whose width is given
+        /// <slider> corresponds to a single rectangle whose width is given</slider>
         /// by a float between -1 and 1. (green is positive, red is negative)
-        /// <hist> corresponds to n vertical sliders.
-        /// <text> is a text field.
+        /// <hist> corresponds to n vertical sliders.</hist>
+        /// <text> is a text field.</text>
         /// <bar> is a rectangle of fixed length to represent the proportions
-        /// of a list of floats.
+        /// of a list of floats.</bar>
         /// </summary>
         public enum DisplayType
         {
-            INDEPENDENT,
-            PROPORTION
+            INDEPENDENT = 0,
+            PROPORTION = 1
         }
 
         /// <summary>
         /// Represents how high above the target the monitors will be.
         /// </summary>
-        [HideInInspector] static public float verticalOffset = 3f;
+        [HideInInspector] static public float VerticalOffset = 3f;
 
-        static bool isInstantiated;
-        static GameObject canvas;
-        static Dictionary<Transform, Dictionary<string, DisplayValue>> displayTransformValues;
-        static Color[] barColors;
+        static bool s_isInstantiated;
+        static GameObject s_canvas;
+        static Dictionary<Transform, Dictionary<string, DisplayValue>> s_displayTransformValues;
+        static Color[] s_barColors;
 
         struct DisplayValue
         {
-            public float time;
-            public string stringValue;
-            public float floatValue;
-            public float[] floatArrayValues;
+            public float Time;
+            public string StringValue;
+            public float FloatValue;
+            public float[] FloatArrayValues;
 
-            public enum ValueType
+            public enum ValueTypes
             {
-                FLOAT,
-                FLOATARRAY_INDEPENDENT,
-                FLOATARRAY_PROPORTION,
-                STRING
+                FLOAT = 0,
+                FLOATARRAY_INDEPENDENT = 1,
+                FLOATARRAY_PROPORTION = 2,
+                STRING = 3
             }
 
-            public ValueType valueType;
+            public ValueTypes valueTypes;
         }
 
-        static GUIStyle keyStyle;
-        static GUIStyle valueStyle;
-        static GUIStyle greenStyle;
-        static GUIStyle redStyle;
-        static GUIStyle[] colorStyle;
-        static bool initialized;
+        static GUIStyle s_keyStyle;
+        static GUIStyle s_valueStyle;
+        static GUIStyle s_greenStyle;
+        static GUIStyle s_redStyle;
+        static GUIStyle[] s_colorStyle;
+        static bool s_initialized;
 
         /// <summary>
         /// Use the Monitor.Log static function to attach information to a transform.
@@ -68,59 +68,50 @@ namespace MLAgents
         /// <param name="value">The string value you want to display.</param>
         /// <param name="target">The transform you want to attach the information to.
         /// </param>
-        public static void Log(
-            string key,
-            string value,
-            Transform target = null)
+        public static void Log(string key, string value, Transform target = null)
         {
-            if (!isInstantiated)
+            if(!s_isInstantiated)
             {
                 InstantiateCanvas();
-                isInstantiated = true;
+                s_isInstantiated = true;
             }
 
-            if (target == null)
+            if(target == null)
             {
-                target = canvas.transform;
+                target = s_canvas.transform;
             }
 
-            if (!displayTransformValues.Keys.Contains(target))
+            if(!s_displayTransformValues.Keys.Contains(target))
             {
-                displayTransformValues[target] =
-                    new Dictionary<string, DisplayValue>();
+                s_displayTransformValues[target] = new Dictionary<string, DisplayValue>();
             }
 
-            Dictionary<string, DisplayValue> displayValues =
-                displayTransformValues[target];
+            var displayValues = s_displayTransformValues[target];
 
-            if (value == null)
+            if(value == null)
             {
                 RemoveValue(target, key);
                 return;
             }
 
-            if (!displayValues.ContainsKey(key))
+            if(!displayValues.ContainsKey(key))
             {
                 var dv = new DisplayValue();
-                dv.time = Time.timeSinceLevelLoad;
-                dv.stringValue = value;
-                dv.valueType = DisplayValue.ValueType.STRING;
+                dv.Time = Time.timeSinceLevelLoad;
+                dv.StringValue = value;
+                dv.valueTypes = DisplayValue.ValueTypes.STRING;
                 displayValues[key] = dv;
                 while (displayValues.Count > 20)
                 {
-                    string max = (
-                        displayValues
-                            .Aggregate((l, r) => l.Value.time < r.Value.time ? l : r)
-                            .Key
-                    );
+                    var max = (displayValues.Aggregate((l, r) => l.Value.Time < r.Value.Time ? l : r).Key);
                     RemoveValue(target, max);
                 }
             }
             else
             {
-                DisplayValue dv = displayValues[key];
-                dv.stringValue = value;
-                dv.valueType = DisplayValue.ValueType.STRING;
+                var dv = displayValues[key];
+                dv.StringValue = value;
+                dv.valueTypes = DisplayValue.ValueTypes.STRING;
                 displayValues[key] = dv;
             }
         }
@@ -133,48 +124,44 @@ namespace MLAgents
         /// <param name="value">The float value you want to display.</param>
         /// <param name="target">The transform you want to attach the information to.
         /// </param>
-        public static void Log(
-            string key,
-            float value,
-            Transform target = null)
+        public static void Log(string key, float value, Transform target = null)
         {
-            if (!isInstantiated)
+            if(!s_isInstantiated)
             {
                 InstantiateCanvas();
-                isInstantiated = true;
+                s_isInstantiated = true;
             }
 
-            if (target == null)
+            if(target == null)
             {
-                target = canvas.transform;
+                target = s_canvas.transform;
             }
 
-            if (!displayTransformValues.Keys.Contains(target))
+            if(!s_displayTransformValues.Keys.Contains(target))
             {
-                displayTransformValues[target] = new Dictionary<string, DisplayValue>();
+                s_displayTransformValues[target] = new Dictionary<string, DisplayValue>();
             }
 
-            Dictionary<string, DisplayValue> displayValues = displayTransformValues[target];
+            var displayValues = s_displayTransformValues[target];
 
-            if (!displayValues.ContainsKey(key))
+            if(!displayValues.ContainsKey(key))
             {
                 var dv = new DisplayValue();
-                dv.time = Time.timeSinceLevelLoad;
-                dv.floatValue = value;
-                dv.valueType = DisplayValue.ValueType.FLOAT;
+                dv.Time = Time.timeSinceLevelLoad;
+                dv.FloatValue = value;
+                dv.valueTypes = DisplayValue.ValueTypes.FLOAT;
                 displayValues[key] = dv;
                 while (displayValues.Count > 20)
                 {
-                    string max = (
-                        displayValues.Aggregate((l, r) => l.Value.time < r.Value.time ? l : r).Key);
+                    var max = (displayValues.Aggregate((l, r) => l.Value.Time < r.Value.Time ? l : r).Key);
                     RemoveValue(target, max);
                 }
             }
             else
             {
-                DisplayValue dv = displayValues[key];
-                dv.floatValue = value;
-                dv.valueType = DisplayValue.ValueType.FLOAT;
+                var dv = displayValues[key];
+                dv.FloatValue = value;
+                dv.valueTypes = DisplayValue.ValueTypes.FLOAT;
                 displayValues[key] = dv;
             }
         }
@@ -188,64 +175,59 @@ namespace MLAgents
         /// <param name="displayType">The type of display.</param>
         /// <param name="target">The transform you want to attach the information to.
         /// </param>
-        public static void Log(
-            string key,
-            float[] value,
-            Transform target = null,
-            DisplayType displayType = DisplayType.INDEPENDENT
-        )
+        public static void Log(string key, float[] value, Transform target = null,
+            DisplayType displayType = DisplayType.INDEPENDENT)
         {
-            if (!isInstantiated)
+            if(!s_isInstantiated)
             {
                 InstantiateCanvas();
-                isInstantiated = true;
+                s_isInstantiated = true;
             }
 
-            if (target == null)
+            if(target == null)
             {
-                target = canvas.transform;
+                target = s_canvas.transform;
             }
 
-            if (!displayTransformValues.Keys.Contains(target))
+            if(!s_displayTransformValues.Keys.Contains(target))
             {
-                displayTransformValues[target] = new Dictionary<string, DisplayValue>();
+                s_displayTransformValues[target] = new Dictionary<string, DisplayValue>();
             }
 
-            Dictionary<string, DisplayValue> displayValues = displayTransformValues[target];
+            var displayValues = s_displayTransformValues[target];
 
-            if (!displayValues.ContainsKey(key))
+            if(!displayValues.ContainsKey(key))
             {
                 var dv = new DisplayValue();
-                dv.time = Time.timeSinceLevelLoad;
-                dv.floatArrayValues = value;
-                if (displayType == DisplayType.INDEPENDENT)
+                dv.Time = Time.timeSinceLevelLoad;
+                dv.FloatArrayValues = value;
+                if(displayType == DisplayType.INDEPENDENT)
                 {
-                    dv.valueType = DisplayValue.ValueType.FLOATARRAY_INDEPENDENT;
+                    dv.valueTypes = DisplayValue.ValueTypes.FLOATARRAY_INDEPENDENT;
                 }
                 else
                 {
-                    dv.valueType = DisplayValue.ValueType.FLOATARRAY_PROPORTION;
+                    dv.valueTypes = DisplayValue.ValueTypes.FLOATARRAY_PROPORTION;
                 }
 
                 displayValues[key] = dv;
                 while (displayValues.Count > 20)
                 {
-                    string max = (
-                        displayValues.Aggregate((l, r) => l.Value.time < r.Value.time ? l : r).Key);
+                    var max = (displayValues.Aggregate((l, r) => l.Value.Time < r.Value.Time ? l : r).Key);
                     RemoveValue(target, max);
                 }
             }
             else
             {
-                DisplayValue dv = displayValues[key];
-                dv.floatArrayValues = value;
-                if (displayType == DisplayType.INDEPENDENT)
+                var dv = displayValues[key];
+                dv.FloatArrayValues = value;
+                if(displayType == DisplayType.INDEPENDENT)
                 {
-                    dv.valueType = DisplayValue.ValueType.FLOATARRAY_INDEPENDENT;
+                    dv.valueTypes = DisplayValue.ValueTypes.FLOATARRAY_INDEPENDENT;
                 }
                 else
                 {
-                    dv.valueType = DisplayValue.ValueType.FLOATARRAY_PROPORTION;
+                    dv.valueTypes = DisplayValue.ValueTypes.FLOATARRAY_PROPORTION;
                 }
 
                 displayValues[key] = dv;
@@ -260,21 +242,21 @@ namespace MLAgents
         /// The transform to which the information is attached.
         /// </param>
         /// <param name="key">The key of the information you want to remove.</param>
-        public static void RemoveValue(Transform target, string key)
+        private static void RemoveValue(Transform target, string key)
         {
-            if (target == null)
+            if(target == null)
             {
-                target = canvas.transform;
+                target = s_canvas.transform;
             }
 
-            if (displayTransformValues.Keys.Contains(target))
+            if(s_displayTransformValues.Keys.Contains(target))
             {
-                if (displayTransformValues[target].ContainsKey(key))
+                if(s_displayTransformValues[target].ContainsKey(key))
                 {
-                    displayTransformValues[target].Remove(key);
-                    if (displayTransformValues[target].Keys.Count == 0)
+                    s_displayTransformValues[target].Remove(key);
+                    if(s_displayTransformValues[target].Keys.Count == 0)
                     {
-                        displayTransformValues.Remove(target);
+                        s_displayTransformValues.Remove(target);
                     }
                 }
             }
@@ -289,14 +271,14 @@ namespace MLAgents
         /// </param>
         public static void RemoveAllValues(Transform target)
         {
-            if (target == null)
+            if(target == null)
             {
-                target = canvas.transform;
+                target = s_canvas.transform;
             }
 
-            if (displayTransformValues.Keys.Contains(target))
+            if(s_displayTransformValues.Keys.Contains(target))
             {
-                displayTransformValues.Remove(target);
+                s_displayTransformValues.Remove(target);
             }
 
         }
@@ -307,16 +289,16 @@ namespace MLAgents
         /// <param name="active">Value to set the Monitor's status to.</param>
         public static void SetActive(bool active)
         {
-            if (!isInstantiated)
+            if(!s_isInstantiated)
             {
                 InstantiateCanvas();
-                isInstantiated = true;
+                s_isInstantiated = true;
 
             }
 
-            if (canvas != null)
+            if(s_canvas != null)
             {
-                canvas.SetActive(active);
+                s_canvas.SetActive(active);
             }
 
         }
@@ -324,167 +306,146 @@ namespace MLAgents
         /// Initializes the canvas.
         static void InstantiateCanvas()
         {
-            canvas = GameObject.Find("AgentMonitorCanvas");
-            if (canvas == null)
+            s_canvas = GameObject.Find("AgentMonitorCanvas");
+            if(s_canvas == null)
             {
-                canvas = new GameObject();
-                canvas.name = "AgentMonitorCanvas";
-                canvas.AddComponent<Monitor>();
+                s_canvas = new GameObject();
+                s_canvas.name = "AgentMonitorCanvas";
+                s_canvas.AddComponent<Monitor>();
             }
 
-            displayTransformValues = new Dictionary<Transform,
-                Dictionary<string, DisplayValue>>();
+            s_displayTransformValues = new Dictionary<Transform, Dictionary<string, DisplayValue>>();
         }
 
         /// <summary> <inheritdoc/> </summary>
         void OnGUI()
         {
-            if (!initialized)
+            if(!s_initialized)
             {
                 Initialize();
-                initialized = true;
+                s_initialized = true;
             }
 
-            var toIterate = displayTransformValues.Keys.ToList();
-            foreach (Transform target in toIterate)
+            var toIterate = s_displayTransformValues.Keys.ToList();
+            foreach (var target in toIterate)
             {
-                if (target == null)
+                if(target == null)
                 {
-                    displayTransformValues.Remove(target);
+                    s_displayTransformValues.Remove(target);
                     continue;
                 }
 
-                float widthScaler = (Screen.width / 1000f);
-                float keyPixelWidth = 100 * widthScaler;
-                float keyPixelHeight = 20 * widthScaler;
-                float paddingwidth = 10 * widthScaler;
+                var widthScaler = (Screen.width / 1000f);
+                var keyPixelWidth = 100 * widthScaler;
+                var keyPixelHeight = 20 * widthScaler;
+                var paddingwidth = 10 * widthScaler;
 
-                float scale = 1f;
-                var origin = new Vector3(
-                    Screen.width / 2 - keyPixelWidth, Screen.height);
-                if (!(target == canvas.transform))
+                var scale = 1f;
+                var origin = new Vector3(Screen.width / 2 - keyPixelWidth, Screen.height);
+                if(!(target == s_canvas.transform))
                 {
-                    Vector3 cam2obj = target.position - Camera.main.transform.position;
-                    scale = Mathf.Min(
-                        1,
-                        20f / (Vector3.Dot(cam2obj, Camera.main.transform.forward)));
-                    Vector3 worldPosition = Camera.main.WorldToScreenPoint(
-                        target.position + new Vector3(0, verticalOffset, 0));
-                    origin = new Vector3(
-                        worldPosition.x - keyPixelWidth * scale, Screen.height - worldPosition.y);
+                    var cam2Obj = target.position - Camera.main.transform.position;
+                    scale = Mathf.Min(1, 20f / (Vector3.Dot(cam2Obj, Camera.main.transform.forward)));
+                    var worldPosition =
+                        Camera.main.WorldToScreenPoint(target.position + new Vector3(0, VerticalOffset, 0));
+                    origin = new Vector3(worldPosition.x - keyPixelWidth * scale, Screen.height - worldPosition.y);
                 }
 
                 keyPixelWidth *= scale;
                 keyPixelHeight *= scale;
                 paddingwidth *= scale;
-                keyStyle.fontSize = (int) (keyPixelHeight * 0.8f);
-                if (keyStyle.fontSize < 2)
+                s_keyStyle.fontSize = (int) (keyPixelHeight * 0.8f);
+                if(s_keyStyle.fontSize < 2)
                 {
                     continue;
                 }
 
 
-                Dictionary<string, DisplayValue> displayValues = displayTransformValues[target];
+                var displayValues = s_displayTransformValues[target];
 
-                int index = 0;
-                var orderedKeys = displayValues.Keys.OrderBy(x => -displayValues[x].time);
+                var index = 0;
+                var orderedKeys = displayValues.Keys.OrderBy(x => -displayValues[x].Time);
                 float[] vals;
                 GUIStyle s;
-                foreach (string key in orderedKeys)
+                foreach (var key in orderedKeys)
                 {
-                    keyStyle.alignment = TextAnchor.MiddleRight;
+                    s_keyStyle.alignment = TextAnchor.MiddleRight;
                     GUI.Label(
-                        new Rect(
-                            origin.x, origin.y - (index + 1) * keyPixelHeight,
-                            keyPixelWidth, keyPixelHeight),
-                        key,
-                        keyStyle);
-                    switch (displayValues[key].valueType)
+                        new Rect(origin.x, origin.y - (index + 1) * keyPixelHeight, keyPixelWidth, keyPixelHeight), key,
+                        s_keyStyle);
+                    switch (displayValues[key].valueTypes)
                     {
-                        case DisplayValue.ValueType.STRING:
-                            valueStyle.alignment = TextAnchor.MiddleLeft;
+                        case DisplayValue.ValueTypes.STRING:
+                            s_valueStyle.alignment = TextAnchor.MiddleLeft;
                             GUI.Label(
-                                new Rect(
-                                    origin.x + paddingwidth + keyPixelWidth,
-                                    origin.y - (index + 1) * keyPixelHeight,
-                                    keyPixelWidth, keyPixelHeight),
-                                displayValues[key].stringValue,
-                                valueStyle);
+                                new Rect(origin.x + paddingwidth + keyPixelWidth,
+                                    origin.y - (index + 1) * keyPixelHeight, keyPixelWidth, keyPixelHeight),
+                                displayValues[key].StringValue, s_valueStyle);
                             break;
-                        case DisplayValue.ValueType.FLOAT:
-                            float sliderValue = displayValues[key].floatValue;
+                        case DisplayValue.ValueTypes.FLOAT:
+                            var sliderValue = displayValues[key].FloatValue;
                             sliderValue = Mathf.Min(1f, sliderValue);
-                            s = greenStyle;
-                            if (sliderValue < 0)
+                            s = s_greenStyle;
+                            if(sliderValue < 0)
                             {
                                 sliderValue = Mathf.Min(1f, -sliderValue);
-                                s = redStyle;
+                                s = s_redStyle;
                             }
 
                             GUI.Box(
-                                new Rect(
-                                    origin.x + paddingwidth + keyPixelWidth,
-                                    origin.y - (index + 0.9f) * keyPixelHeight,
-                                    keyPixelWidth * sliderValue, keyPixelHeight * 0.8f),
-                                GUIContent.none,
-                                s);
+                                new Rect(origin.x + paddingwidth + keyPixelWidth,
+                                    origin.y - (index + 0.9f) * keyPixelHeight, keyPixelWidth * sliderValue,
+                                    keyPixelHeight * 0.8f), GUIContent.none, s);
                             break;
 
-                        case DisplayValue.ValueType.FLOATARRAY_INDEPENDENT:
-                            float histWidth = 0.15f;
-                            vals = displayValues[key].floatArrayValues;
-                            for (int i = 0; i < vals.Length; i++)
+                        case DisplayValue.ValueTypes.FLOATARRAY_INDEPENDENT:
+                            var histWidth = 0.15f;
+                            vals = displayValues[key].FloatArrayValues;
+                            for (var i = 0; i < vals.Length; i++)
                             {
-                                float value = Mathf.Min(vals[i], 1);
-                                s = greenStyle;
-                                if (value < 0)
+                                var value = Mathf.Min(vals[i], 1);
+                                s = s_greenStyle;
+                                if(value < 0)
                                 {
                                     value = Mathf.Min(1f, -value);
-                                    s = redStyle;
+                                    s = s_redStyle;
                                 }
 
                                 GUI.Box(
                                     new Rect(
                                         origin.x + paddingwidth + keyPixelWidth +
                                         (keyPixelWidth * histWidth + paddingwidth / 2) * i,
-                                        origin.y - (index + 0.1f) * keyPixelHeight,
-                                        keyPixelWidth * histWidth, -keyPixelHeight * value),
-                                    GUIContent.none,
-                                    s);
+                                        origin.y - (index + 0.1f) * keyPixelHeight, keyPixelWidth * histWidth,
+                                        -keyPixelHeight * value), GUIContent.none, s);
                             }
 
                             break;
 
-                        case DisplayValue.ValueType.FLOATARRAY_PROPORTION:
-                            float valsSum = 0f;
-                            float valsCum = 0f;
-                            vals = displayValues[key].floatArrayValues;
-                            foreach (float f in vals)
+                        case DisplayValue.ValueTypes.FLOATARRAY_PROPORTION:
+                            var valsSum = 0f;
+                            var valsCum = 0f;
+                            vals = displayValues[key].FloatArrayValues;
+                            foreach (var f in vals)
                             {
                                 valsSum += Mathf.Max(f, 0);
                             }
 
-                            if (valsSum < float.Epsilon)
+                            if(valsSum < float.Epsilon)
                             {
-                                Debug.LogError(
-                                    string.Format("The Monitor value for key {0} " +
-                                                  "must be a list or array of " +
-                                                  "positive values and cannot " +
-                                                  "be empty.", key));
+                                Debug.LogError(string.Format(
+                                    "The Monitor value for key {0} " + "must be a list or array of " +
+                                    "positive values and cannot " + "be empty.", key));
                             }
                             else
                             {
-                                for (int i = 0; i < vals.Length; i++)
+                                for (var i = 0; i < vals.Length; i++)
                                 {
-                                    float value = Mathf.Max(vals[i], 0) / valsSum;
+                                    var value = Mathf.Max(vals[i], 0) / valsSum;
                                     GUI.Box(
-                                        new Rect(
-                                            origin.x + paddingwidth +
-                                            keyPixelWidth + keyPixelWidth * valsCum,
-                                            origin.y - (index + 0.9f) * keyPixelHeight,
-                                            keyPixelWidth * value, keyPixelHeight * 0.8f),
-                                        GUIContent.none,
-                                        colorStyle[i % colorStyle.Length]);
+                                        new Rect(origin.x + paddingwidth + keyPixelWidth + keyPixelWidth * valsCum,
+                                            origin.y - (index + 0.9f) * keyPixelHeight, keyPixelWidth * value,
+                                            keyPixelHeight * 0.8f), GUIContent.none,
+                                        s_colorStyle[i % s_colorStyle.Length]);
                                     valsCum += value;
 
                                 }
@@ -502,32 +463,24 @@ namespace MLAgents
         /// Helper method used to initialize the GUI. Called once.
         void Initialize()
         {
-            keyStyle = GUI.skin.label;
-            valueStyle = GUI.skin.label;
-            valueStyle.clipping = TextClipping.Overflow;
-            valueStyle.wordWrap = false;
-            barColors = new Color[6]
-            {
-                Color.magenta,
-                Color.blue,
-                Color.cyan,
-                Color.green,
-                Color.yellow,
-                Color.red
-            };
-            colorStyle = new GUIStyle[barColors.Length];
-            for (int i = 0; i < barColors.Length; i++)
+            s_keyStyle = GUI.skin.label;
+            s_valueStyle = GUI.skin.label;
+            s_valueStyle.clipping = TextClipping.Overflow;
+            s_valueStyle.wordWrap = false;
+            s_barColors = new Color[6] {Color.magenta, Color.blue, Color.cyan, Color.green, Color.yellow, Color.red};
+            s_colorStyle = new GUIStyle[s_barColors.Length];
+            for (var i = 0; i < s_barColors.Length; i++)
             {
                 var texture = new Texture2D(1, 1, TextureFormat.ARGB32, false);
-                texture.SetPixel(0, 0, barColors[i]);
+                texture.SetPixel(0, 0, s_barColors[i]);
                 texture.Apply();
                 var staticRectStyle = new GUIStyle();
                 staticRectStyle.normal.background = texture;
-                colorStyle[i] = staticRectStyle;
+                s_colorStyle[i] = staticRectStyle;
             }
 
-            greenStyle = colorStyle[3];
-            redStyle = colorStyle[5];
+            s_greenStyle = s_colorStyle[3];
+            s_redStyle = s_colorStyle[5];
         }
     }
 }

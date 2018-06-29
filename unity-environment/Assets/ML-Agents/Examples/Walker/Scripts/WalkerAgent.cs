@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using MLAgents;
 
 public class WalkerAgent : Agent
@@ -59,7 +57,7 @@ public class WalkerAgent : Agent
         AddVectorObs(bp.groundContact.touchingGround ? 1 : 0); // Is this bp touching the ground
         AddVectorObs(rb.velocity);
         AddVectorObs(rb.angularVelocity);
-        Vector3 localPosRelToHips = hips.InverseTransformPoint(rb.position);
+        var localPosRelToHips = hips.InverseTransformPoint(rb.position);
         AddVectorObs(localPosRelToHips);
 
         if (bp.rb.transform != hips && bp.rb.transform != handL && bp.rb.transform != handR &&
@@ -98,7 +96,7 @@ public class WalkerAgent : Agent
         if (isNewDecisionStep)
         {
             var bpDict = jdController.bodyPartsDict;
-            int i = -1;
+            var i = -1;
 
             bpDict[chest].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], vectorAction[++i]);
             bpDict[spine].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], vectorAction[++i]);

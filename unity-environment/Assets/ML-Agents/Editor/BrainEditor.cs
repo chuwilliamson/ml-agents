@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 using UnityEditor;
-using System.Linq;
 
 namespace MLAgents
 {
@@ -14,12 +11,12 @@ namespace MLAgents
     [CustomEditor(typeof(Brain))]
     public class BrainEditor : Editor
     {
-        [SerializeField] bool _Foldout = true;
+        [SerializeField] bool m_foldout = true;
 
         public override void OnInspectorGUI()
         {
-            Brain myBrain = (Brain) target;
-            SerializedObject serializedBrain = serializedObject;
+            var myBrain = (Brain) target;
+            var serializedBrain = serializedObject;
 
             if (myBrain.transform.parent == null)
             {
@@ -34,7 +31,7 @@ namespace MLAgents
                     MessageType.Error);
             }
 
-            BrainParameters parameters = myBrain.brainParameters;
+            var parameters = myBrain.brainParameters;
             if (parameters.vectorActionDescriptions == null ||
                 parameters.vectorActionDescriptions.Length != parameters.vectorActionSize)
                 parameters.vectorActionDescriptions = new string[parameters.vectorActionSize];
@@ -42,22 +39,22 @@ namespace MLAgents
             serializedBrain.Update();
 
 
-            _Foldout = EditorGUILayout.Foldout(_Foldout, "Brain Parameters");
-            int indentLevel = EditorGUI.indentLevel;
-            if (_Foldout)
+            m_foldout = EditorGUILayout.Foldout(m_foldout, "Brain Parameters");
+            var indentLevel = EditorGUI.indentLevel;
+            if (m_foldout)
             {
                 EditorGUI.indentLevel++;
                 EditorGUILayout.LabelField("Vector Observation");
                 EditorGUI.indentLevel++;
 
-                SerializedProperty bpVectorObsType =
+                var bpVectorObsType =
                     serializedBrain.FindProperty("brainParameters.vectorObservationSpaceType");
                 EditorGUILayout.PropertyField(bpVectorObsType, new GUIContent("Space Type",
                     "Corresponds to whether state " +
                     "vector contains a single integer (Discrete) " +
                     "or a series of real-valued floats (Continuous)."));
 
-                SerializedProperty bpVectorObsSize =
+                var bpVectorObsSize =
                     serializedBrain.FindProperty("brainParameters.vectorObservationSize");
                 EditorGUILayout.PropertyField(bpVectorObsSize, new GUIContent("Space Size",
                     "Length of state " +
@@ -65,14 +62,14 @@ namespace MLAgents
                     "Or number of possible values (in Discrete state space)."));
 
 
-                SerializedProperty bpNumStackedVectorObs =
+                var bpNumStackedVectorObs =
                     serializedBrain.FindProperty("brainParameters.numStackedVectorObservations");
                 EditorGUILayout.PropertyField(bpNumStackedVectorObs, new GUIContent(
                     "Stacked Vectors", "Number of states that" +
                                        " will be stacked before beeing fed to the neural network."));
 
                 EditorGUI.indentLevel--;
-                SerializedProperty bpCamResol =
+                var bpCamResol =
                     serializedBrain.FindProperty("brainParameters.cameraResolutions");
                 EditorGUILayout.PropertyField(bpCamResol, new GUIContent("Visual Observation",
                     "Describes height, " +
@@ -81,21 +78,21 @@ namespace MLAgents
                 EditorGUILayout.LabelField("Vector Action");
                 EditorGUI.indentLevel++;
 
-                SerializedProperty bpVectorActionType =
+                var bpVectorActionType =
                     serializedBrain.FindProperty("brainParameters.vectorActionSpaceType");
                 EditorGUILayout.PropertyField(bpVectorActionType, new GUIContent("Space Type",
                     "Corresponds to whether state" +
                     " vector contains a single integer (Discrete) " +
                     "or a series of real-valued floats (Continuous)."));
 
-                SerializedProperty bpVectorActionSize =
+                var bpVectorActionSize =
                     serializedBrain.FindProperty("brainParameters.vectorActionSize");
                 EditorGUILayout.PropertyField(bpVectorActionSize, new GUIContent("Space Size",
                     "Length of action vector " +
                     "for brain (In Continuous state space)." +
                     "Or number of possible values (In Discrete action space)."));
 
-                SerializedProperty bpVectorActionDescription =
+                var bpVectorActionDescription =
                     serializedBrain.FindProperty("brainParameters.vectorActionDescriptions");
                 EditorGUILayout.PropertyField(bpVectorActionDescription, new GUIContent(
                     "Action Descriptions", "A list of strings used to name" +
@@ -104,7 +101,7 @@ namespace MLAgents
             }
 
             EditorGUI.indentLevel = indentLevel;
-            SerializedProperty bt = serializedBrain.FindProperty("brainType");
+            var bt = serializedBrain.FindProperty("brainType");
             EditorGUILayout.PropertyField(bt);
 
 

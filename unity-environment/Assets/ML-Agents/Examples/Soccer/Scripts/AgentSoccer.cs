@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using MLAgents;
 
 public class AgentSoccer : Agent
@@ -8,11 +6,11 @@ public class AgentSoccer : Agent
 
     public enum Team
     {
-        red, blue
+        red = 0, blue = 1
     }
     public enum AgentRole
     {
-        striker, goalie
+        striker = 0, goalie = 1
     }
     public Team team;
     public AgentRole agentRole;
@@ -51,7 +49,7 @@ public class AgentSoccer : Agent
         agentRenderer = GetComponent<Renderer>();
         rayPer = GetComponent<RayPerception>();
         academy = FindObjectOfType<SoccerAcademy>();
-        PlayerState playerState = new PlayerState();
+        var playerState = new PlayerState();
         playerState.agentRB = GetComponent<Rigidbody>();
         agentRB = GetComponent<Rigidbody>();
         agentRB.maxAngularVelocity = 500;
@@ -64,7 +62,7 @@ public class AgentSoccer : Agent
 
     public override void CollectObservations()
     {
-        float rayDistance = 20f;
+        var rayDistance = 20f;
         float[] rayAngles = { 0f, 45f, 90f, 135f, 180f, 110f, 70f };
         string[] detectableObjects;
         if (team == Team.red)
@@ -83,10 +81,10 @@ public class AgentSoccer : Agent
 
     public void MoveAgent(float[] act)
     {
-        Vector3 dirToGo = Vector3.zero;
-        Vector3 rotateDir = Vector3.zero;
+        var dirToGo = Vector3.zero;
+        var rotateDir = Vector3.zero;
 
-        int action = Mathf.FloorToInt(act[0]);
+        var action = Mathf.FloorToInt(act[0]);
 
         // Goalies and Strikers have slightly different action spaces.
         if (agentRole == AgentRole.goalie)
@@ -163,10 +161,10 @@ public class AgentSoccer : Agent
     /// </summary>
     void OnCollisionEnter(Collision c)
     {
-        float force = 2000f * kickPower;
+        var force = 2000f * kickPower;
         if (c.gameObject.tag == "ball")
         {
-            Vector3 dir = c.contacts[0].point - transform.position;
+            var dir = c.contacts[0].point - transform.position;
             dir = dir.normalized;
             c.gameObject.GetComponent<Rigidbody>().AddForce(dir * force);
         }

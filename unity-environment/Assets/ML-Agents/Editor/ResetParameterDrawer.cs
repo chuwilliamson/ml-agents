@@ -3,6 +3,7 @@ using UnityEditor;
 using System;
 using System.Linq;
 using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 namespace MLAgents
 {
@@ -10,28 +11,28 @@ namespace MLAgents
     [CustomPropertyDrawer(typeof(ResetParameters))]
     public class ResetParameterDrawer : PropertyDrawer
     {
-        private ResetParameters _Dictionary;
-        private const float lineHeight = 17f;
+        private ResetParameters m_dictionary;
+        private const float LineHeight = 17f;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             CheckInitialize(property, label);
-            return (_Dictionary.Count + 2) * lineHeight;
+            return (m_dictionary.Count + 2) * LineHeight;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
 
             CheckInitialize(property, label);
-            position.height = lineHeight;
+            position.height = LineHeight;
             EditorGUI.LabelField(position, label);
 
             EditorGUI.BeginProperty(position, label, property);
-            foreach (var item in _Dictionary)
+            foreach (var item in m_dictionary)
             {
                 var key = item.Key;
                 var value = item.Value;
-                position.y += lineHeight;
+                position.y += LineHeight;
 
                 // This is the rectangle for the key
                 var keyRect = position;
@@ -42,11 +43,11 @@ namespace MLAgents
                 var newKey = EditorGUI.TextField(keyRect, key);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+                    EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
                     try
                     {
-                        _Dictionary.Remove(key);
-                        _Dictionary.Add(newKey, value);
+                        m_dictionary.Remove(key);
+                        m_dictionary.Add(newKey, value);
                     }
                     catch (Exception e)
                     {
@@ -64,33 +65,33 @@ namespace MLAgents
                 value = EditorGUI.FloatField(valueRect, value);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
-                    _Dictionary[key] = value;
+                    EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+                    m_dictionary[key] = value;
                     break;
                 }
             }
 
             // This is the rectangle for the Add button
-            position.y += lineHeight;
-            var AddButtonRect = position;
-            AddButtonRect.x += 20;
-            AddButtonRect.width /= 2;
-            AddButtonRect.width -= 24;
-            if (GUI.Button(AddButtonRect, new GUIContent("Add New",
+            position.y += LineHeight;
+            var addButtonRect = position;
+            addButtonRect.x += 20;
+            addButtonRect.width /= 2;
+            addButtonRect.width -= 24;
+            if (GUI.Button(addButtonRect, new GUIContent("Add New",
                 "Add a new item to the default reset paramters"), EditorStyles.miniButton))
             {
-                EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+                EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
                 AddNewItem();
             }
 
             // This is the rectangle for the Remove button
-            var RemoveButtonRect = position;
-            RemoveButtonRect.x = position.width / 2 + 15;
-            RemoveButtonRect.width = AddButtonRect.width - 18;
-            if (GUI.Button(RemoveButtonRect, new GUIContent("Remove Last",
+            var removeButtonRect = position;
+            removeButtonRect.x = position.width / 2 + 15;
+            removeButtonRect.width = addButtonRect.width - 18;
+            if (GUI.Button(removeButtonRect, new GUIContent("Remove Last",
                 "Remove the last item to the default reset paramters"), EditorStyles.miniButton))
             {
-                EditorSceneManager.MarkSceneDirty(EditorSceneManager.GetActiveScene());
+                EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
                 RemoveLastItem();
             }
 
@@ -101,39 +102,39 @@ namespace MLAgents
 
         private void CheckInitialize(SerializedProperty property, GUIContent label)
         {
-            if (_Dictionary == null)
+            if (m_dictionary == null)
             {
                 var target = property.serializedObject.targetObject;
-                _Dictionary = fieldInfo.GetValue(target) as ResetParameters;
-                if (_Dictionary == null)
+                m_dictionary = fieldInfo.GetValue(target) as ResetParameters;
+                if (m_dictionary == null)
                 {
-                    _Dictionary = new ResetParameters();
-                    fieldInfo.SetValue(target, _Dictionary);
+                    m_dictionary = new ResetParameters();
+                    fieldInfo.SetValue(target, m_dictionary);
                 }
             }
         }
 
         private void ClearResetParamters()
         {
-            _Dictionary.Clear();
+            m_dictionary.Clear();
         }
 
         private void RemoveLastItem()
         {
-            if (_Dictionary.Count > 0)
+            if (m_dictionary.Count > 0)
             {
-                string key = _Dictionary.Keys.ToList()[_Dictionary.Count - 1];
-                _Dictionary.Remove(key);
+                var key = m_dictionary.Keys.ToList()[m_dictionary.Count - 1];
+                m_dictionary.Remove(key);
             }
         }
 
         private void AddNewItem()
         {
-            string key = "Param-" + _Dictionary.Count.ToString();
+            var key = "Param-" + m_dictionary.Count.ToString();
             var value = default(float);
             try
             {
-                _Dictionary.Add(key, value);
+                m_dictionary.Add(key, value);
             }
             catch (Exception e)
             {

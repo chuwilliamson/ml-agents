@@ -14,25 +14,25 @@ namespace MLAgents
 
         public override void OnInspectorGUI()
         {
-            SerializedObject serializedAgent = serializedObject;
+            var serializedAgent = serializedObject;
             serializedAgent.Update();
 
-            SerializedProperty brain = serializedAgent.FindProperty("brain");
-            SerializedProperty actionsPerDecision = serializedAgent.FindProperty(
+            var brain = serializedAgent.FindProperty("brain");
+            var actionsPerDecision = serializedAgent.FindProperty(
                 "agentParameters.numberOfActionsBetweenDecisions");
-            SerializedProperty maxSteps = serializedAgent.FindProperty(
+            var maxSteps = serializedAgent.FindProperty(
                 "agentParameters.maxStep");
-            SerializedProperty isResetOnDone = serializedAgent.FindProperty(
+            var isResetOnDone = serializedAgent.FindProperty(
                 "agentParameters.resetOnDone");
-            SerializedProperty isODD = serializedAgent.FindProperty(
+            var isODD = serializedAgent.FindProperty(
                 "agentParameters.onDemandDecision");
-            SerializedProperty cameras = serializedAgent.FindProperty(
+            var cameras = serializedAgent.FindProperty(
                 "agentParameters.agentCameras");
 
             EditorGUILayout.PropertyField(brain);
 
             EditorGUILayout.LabelField("Agent Cameras");
-            for (int i = 0; i < cameras.arraySize; i++)
+            for (var i = 0; i < cameras.arraySize; i++)
             {
                 EditorGUILayout.PropertyField(
                     cameras.GetArrayElementAtIndex(i),

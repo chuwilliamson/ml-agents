@@ -1,7 +1,6 @@
 ﻿//Put this script on your blue cube.
 
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using MLAgents;
 
@@ -91,14 +90,14 @@ public class PushAgentBasic : Agent
     /// </summary>
     public Vector3 GetRandomSpawnPos()
     {
-        bool foundNewSpawnLocation = false;
-        Vector3 randomSpawnPos = Vector3.zero;
+        var foundNewSpawnLocation = false;
+        var randomSpawnPos = Vector3.zero;
         while (foundNewSpawnLocation == false)
         {
-            float randomPosX = Random.Range(-areaBounds.extents.x * academy.spawnAreaMarginMultiplier,
+            var randomPosX = Random.Range(-areaBounds.extents.x * academy.spawnAreaMarginMultiplier,
                                 areaBounds.extents.x * academy.spawnAreaMarginMultiplier);
 
-            float randomPosZ = Random.Range(-areaBounds.extents.z * academy.spawnAreaMarginMultiplier,
+            var randomPosZ = Random.Range(-areaBounds.extents.z * academy.spawnAreaMarginMultiplier,
                                             areaBounds.extents.z * academy.spawnAreaMarginMultiplier);
             randomSpawnPos = ground.transform.position + new Vector3(randomPosX, 1f, randomPosZ);
             if (Physics.CheckBox(randomSpawnPos, new Vector3(2.5f, 0.01f, 2.5f)) == false)
@@ -140,10 +139,10 @@ public class PushAgentBasic : Agent
 	public void MoveAgent(float[] act)
     {
 
-        Vector3 dirToGo = Vector3.zero;
-        Vector3 rotateDir = Vector3.zero;
+        var dirToGo = Vector3.zero;
+        var rotateDir = Vector3.zero;
 
-        int action = Mathf.FloorToInt(act[0]);
+        var action = Mathf.FloorToInt(act[0]);
 
         // Goalies and Strikers have slightly different action spaces.
         switch (action)
@@ -207,8 +206,8 @@ public class PushAgentBasic : Agent
     /// </summary>
 	public override void AgentReset()
     {
-        int rotation = Random.Range(0, 4);
-        float rotationAngle = rotation * 90f;
+        var rotation = Random.Range(0, 4);
+        var rotationAngle = rotation * 90f;
         area.transform.Rotate(new Vector3(0f, rotationAngle, 0f));
 
         ResetBlock();

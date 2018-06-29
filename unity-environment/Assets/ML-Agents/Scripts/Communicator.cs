@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using MLAgents.CommunicatorObjects;
+﻿using MLAgents.CommunicatorObjects;
 
 namespace MLAgents
 {

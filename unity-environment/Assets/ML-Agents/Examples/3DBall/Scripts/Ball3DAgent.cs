@@ -1,25 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using MLAgents;
 
 public class Ball3DAgent : Agent
 {
     [Header("Specific to Ball3D")]
-    public GameObject ball;
-    private Rigidbody ballRb;
+    public GameObject Ball;
+    private Rigidbody m_ballRb;
 
     public override void InitializeAgent()
     {
-        ballRb = ball.GetComponent<Rigidbody>();
+        m_ballRb = Ball.GetComponent<Rigidbody>();
     }
 
     public override void CollectObservations()
     {
         AddVectorObs(gameObject.transform.rotation.z);
         AddVectorObs(gameObject.transform.rotation.x);
-        AddVectorObs(ball.transform.position - gameObject.transform.position);
-        AddVectorObs(ballRb.velocity);
+        AddVectorObs(Ball.transform.position - gameObject.transform.position);
+        AddVectorObs(m_ballRb.velocity);
     }
 
     public override void AgentAction(float[] vectorAction, string textAction)
@@ -42,9 +40,9 @@ public class Ball3DAgent : Agent
                 gameObject.transform.Rotate(new Vector3(1, 0, 0), actionX);
             }
         }
-        if ((ball.transform.position.y - gameObject.transform.position.y) < -2f ||
-            Mathf.Abs(ball.transform.position.x - gameObject.transform.position.x) > 3f ||
-            Mathf.Abs(ball.transform.position.z - gameObject.transform.position.z) > 3f)
+        if ((Ball.transform.position.y - gameObject.transform.position.y) < -2f ||
+            Mathf.Abs(Ball.transform.position.x - gameObject.transform.position.x) > 3f ||
+            Mathf.Abs(Ball.transform.position.z - gameObject.transform.position.z) > 3f)
         {
             Done();
             SetReward(-1f);
@@ -60,8 +58,8 @@ public class Ball3DAgent : Agent
         gameObject.transform.rotation = new Quaternion(0f, 0f, 0f, 0f);
         gameObject.transform.Rotate(new Vector3(1, 0, 0), Random.Range(-10f, 10f));
         gameObject.transform.Rotate(new Vector3(0, 0, 1), Random.Range(-10f, 10f));
-        ballRb.velocity = new Vector3(0f, 0f, 0f);
-        ball.transform.position = new Vector3(Random.Range(-1.5f, 1.5f), 4f, Random.Range(-1.5f, 1.5f))
+        m_ballRb.velocity = new Vector3(0f, 0f, 0f);
+        Ball.transform.position = new Vector3(Random.Range(-1.5f, 1.5f), 4f, Random.Range(-1.5f, 1.5f))
                                       + gameObject.transform.position;
 
     }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MLAgents
 {
@@ -21,7 +19,7 @@ namespace MLAgents
         void Update()
         {
             // gameObject.transform.position = target.position + offset;
-            Vector3 newPosition = new Vector3(target.position.x + offset.x, transform.position.y,
+            var newPosition = new Vector3(target.position.x + offset.x, transform.position.y,
                 target.position.z + offset.z);
             gameObject.transform.position = newPosition;
         }

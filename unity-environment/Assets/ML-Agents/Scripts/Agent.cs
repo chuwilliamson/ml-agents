@@ -253,7 +253,7 @@ namespace MLAgents
         void OnEnable()
         {
             id = gameObject.GetInstanceID();
-            Academy academy = Object.FindObjectOfType<Academy>() as Academy;
+            var academy = Object.FindObjectOfType<Academy>() as Academy;
             OnEnableHelper(academy);
         }
 
@@ -296,7 +296,7 @@ namespace MLAgents
         /// becomes disabled or inactive.
         void OnDisable()
         {
-            Academy academy = Object.FindObjectOfType<Academy>() as Academy;
+            var academy = Object.FindObjectOfType<Academy>() as Academy;
             if (academy != null)
             {
                 academy.AgentSetStatus -= SetStatus;
@@ -445,7 +445,7 @@ namespace MLAgents
                 return;
             }
 
-            BrainParameters param = brain.brainParameters;
+            var param = brain.brainParameters;
             if (param.vectorActionSpaceType == SpaceType.continuous)
             {
                 action.vectorActions = new float[param.vectorActionSize];
@@ -515,7 +515,7 @@ namespace MLAgents
             info.vectorObservation.Clear();
             CollectObservations();
 
-            BrainParameters param = brain.brainParameters;
+            var param = brain.brainParameters;
             if (param.vectorObservationSpaceType == SpaceType.continuous)
             {
                 if (info.vectorObservation.Count != param.vectorObservationSize)
@@ -559,7 +559,7 @@ namespace MLAgents
                     agentParameters.agentCameras.Count));
             }
 
-            for (int i = 0; i < brain.brainParameters.cameraResolutions.Length; i++)
+            for (var i = 0; i < brain.brainParameters.cameraResolutions.Length; i++)
             {
                 info.visualObservations.Add(ObservationToTexture(
                     agentParameters.agentCameras[i],
@@ -931,7 +931,7 @@ namespace MLAgents
         /// <param name="height">Height of resulting 2D texture.</param>
         public static Texture2D ObservationToTexture(Camera camera, int width, int height)
         {
-            Rect oldRec = camera.rect;
+            var oldRec = camera.rect;
             camera.rect = new Rect(0f, 0f, 1f, 1f);
             var depth = 24;
             var format = RenderTextureFormat.Default;

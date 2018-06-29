@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace MLAgents
@@ -21,9 +20,9 @@ namespace MLAgents
         {
             resetParameters.Clear();
 
-            foreach (KeyValuePair<string, float> pair in this)
+            foreach (var pair in this)
             {
-                ResetParameter rp = new ResetParameter();
+                var rp = new ResetParameter();
                 rp.key = pair.Key;
 
                 rp.value = pair.Value;
@@ -38,7 +37,7 @@ namespace MLAgents
 
 
 
-            for (int i = 0; i < resetParameters.Count; i++)
+            for (var i = 0; i < resetParameters.Count; i++)
             {
                 if (this.ContainsKey(resetParameters[i].key))
                 {

@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.Security.AccessControl;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class TennisArea : MonoBehaviour {
 
@@ -19,8 +16,8 @@ public class TennisArea : MonoBehaviour {
     
     public void MatchReset() 
     {
-        float ballOut = Random.Range(6f, 8f);
-        int flip = Random.Range(0, 2);
+        var ballOut = Random.Range(6f, 8f);
+        var flip = Random.Range(0, 2);
         if (flip == 0)
         {
             ball.transform.position = new Vector3(-ballOut, 6f, 0f) + transform.position;
@@ -36,7 +33,7 @@ public class TennisArea : MonoBehaviour {
 
     void FixedUpdate() 
     {
-        Vector3 rgV = ballRb.velocity;
+        var rgV = ballRb.velocity;
         ballRb.velocity = new Vector3(Mathf.Clamp(rgV.x, -9f, 9f), Mathf.Clamp(rgV.y, -9f, 9f), rgV.z);
     }
 }

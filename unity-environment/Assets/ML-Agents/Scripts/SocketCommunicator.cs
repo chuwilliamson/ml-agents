@@ -1,7 +1,5 @@
 using Google.Protobuf;
-using Grpc.Core;
 using System.Net.Sockets;
-using UnityEngine;
 using MLAgents.CommunicatorObjects;
 using System.Threading.Tasks;
 #if UNITY_EDITOR
@@ -44,7 +42,7 @@ namespace MLAgents
                 ProtocolType.Tcp);
             m_sender.Connect("localhost", communicatorParameters.port);
 
-            UnityMessage initializationInput =
+            var initializationInput =
                 UnityMessage.Parser.ParseFrom(Receive());
 
             Send(WrapMessage(unityOutput, 200).ToByteArray());
@@ -65,12 +63,12 @@ namespace MLAgents
         byte[] Receive()
         {
             m_sender.Receive(m_lengthHolder);
-            int totalLength = System.BitConverter.ToInt32(m_lengthHolder, 0);
-            int location = 0;
-            byte[] result = new byte[totalLength];
+            var totalLength = System.BitConverter.ToInt32(m_lengthHolder, 0);
+            var location = 0;
+            var result = new byte[totalLength];
             while (location != totalLength)
             {
-                int fragment = m_sender.Receive(m_messageHolder);
+                var fragment = m_sender.Receive(m_messageHolder);
                 System.Buffer.BlockCopy(
                     m_messageHolder, 0, result, location, fragment);
                 location += fragment;
@@ -85,7 +83,7 @@ namespace MLAgents
         /// <param name="input">The byte[] to be sent.</param>
         void Send(byte[] input)
         {
-            byte[] newArray = new byte[input.Length + 4];
+            var newArray = new byte[input.Length + 4];
             input.CopyTo(newArray, 4);
             System.BitConverter.GetBytes(input.Length).CopyTo(newArray, 0);
             m_sender.Send(newArray);

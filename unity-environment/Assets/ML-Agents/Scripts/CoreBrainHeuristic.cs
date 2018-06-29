@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -59,7 +58,7 @@ namespace MLAgents
                     "The Brain is set to Heuristic, but no decision script attached to it");
             }
 
-            foreach (Agent agent in agentInfo.Keys)
+            foreach (var agent in agentInfo.Keys)
             {
                 agent.UpdateVectorAction(decision.Decide(
                     agentInfo[agent].stackedVectorObservation,
@@ -70,7 +69,7 @@ namespace MLAgents
 
             }
 
-            foreach (Agent agent in agentInfo.Keys)
+            foreach (var agent in agentInfo.Keys)
             {
                 agent.UpdateMemoriesAction(decision.MakeMemory(
                     agentInfo[agent].stackedVectorObservation,

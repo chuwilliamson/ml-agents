@@ -1,9 +1,7 @@
 ﻿//Put this script on your blue cube.
 
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 using MLAgents;
 
 public class WallJumpAgent : Agent
@@ -84,8 +82,8 @@ public class WallJumpAgent : Agent
                             new Vector3(boxWidth / 2f, 0.5f, boxWidth / 2f),
                             hitGroundColliders,
                             gameObject.transform.rotation);
-        bool grounded = false;
-        foreach (Collider col in hitGroundColliders)
+        var grounded = false;
+        foreach (var col in hitGroundColliders)
         {
 
             if (col != null && col.transform != this.transform &&
@@ -112,8 +110,8 @@ public class WallJumpAgent : Agent
     void MoveTowards(
         Vector3 targetPos, Rigidbody rb, float targetVel, float maxVel)
     {
-        Vector3 moveToPos = targetPos - rb.worldCenterOfMass;
-        Vector3 velocityTarget = moveToPos * targetVel * Time.fixedDeltaTime;
+        var moveToPos = targetPos - rb.worldCenterOfMass;
+        var velocityTarget = moveToPos * targetVel * Time.fixedDeltaTime;
         if (float.IsNaN(velocityTarget.x) == false)
         {
             rb.velocity = Vector3.MoveTowards(
@@ -123,13 +121,13 @@ public class WallJumpAgent : Agent
 
     public override void CollectObservations()
     {
-            float rayDistance = 20f;
+            var rayDistance = 20f;
             float[] rayAngles = { 0f, 45f, 90f, 135f, 180f, 110f, 70f };
             AddVectorObs(rayPer.Perceive(
                 rayDistance, rayAngles, detectableObjects, 0f, 0f));
             AddVectorObs(rayPer.Perceive(
                 rayDistance, rayAngles, detectableObjects, 2.5f, 2.5f));
-            Vector3 agentPos = agentRB.position - ground.transform.position;
+            var agentPos = agentRB.position - ground.transform.position;
 
             AddVectorObs(agentPos / 20f);
             AddVectorObs(DoGroundCheck(0.4f) ? 1 : 0);
@@ -141,10 +139,10 @@ public class WallJumpAgent : Agent
     /// <returns>The random spawn position.</returns>
     public Vector3 GetRandomSpawnPos()
     {
-        Vector3 randomSpawnPos = Vector3.zero;
-        float randomPosX = Random.Range(-spawnAreaBounds.extents.x,
+        var randomSpawnPos = Vector3.zero;
+        var randomPosX = Random.Range(-spawnAreaBounds.extents.x,
                                         spawnAreaBounds.extents.x);
-        float randomPosZ = Random.Range(-spawnAreaBounds.extents.z,
+        var randomPosZ = Random.Range(-spawnAreaBounds.extents.z,
                                         spawnAreaBounds.extents.z);
 
         randomSpawnPos = spawnArea.transform.position +
@@ -170,13 +168,13 @@ public class WallJumpAgent : Agent
     {
 
         AddReward(-0.0005f);
-        bool smallGrounded = DoGroundCheck(0.4f);
-        bool largeGrounded = DoGroundCheck(1.0f);
+        var smallGrounded = DoGroundCheck(0.4f);
+        var largeGrounded = DoGroundCheck(1.0f);
 
-        Vector3 dirToGo = Vector3.zero;
-        Vector3 rotateDir = Vector3.zero;
+        var dirToGo = Vector3.zero;
+        var rotateDir = Vector3.zero;
 
-        int action = Mathf.FloorToInt(act[0]);
+        var action = Mathf.FloorToInt(act[0]);
         switch (action)
         {
             case 0:
@@ -310,7 +308,7 @@ public class WallJumpAgent : Agent
         }
         else
         {
-            float height =
+            var height =
                 academy.resetParameters["big_wall_min_height"] +
                 Random.value * (academy.resetParameters["big_wall_max_height"] -
                 academy.resetParameters["big_wall_min_height"]);

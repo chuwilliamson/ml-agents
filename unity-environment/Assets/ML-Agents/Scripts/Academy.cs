@@ -614,7 +614,7 @@ namespace MLAgents
         /// </returns>
         static List<Brain> GetBrains(GameObject academy)
         {
-            List<Brain> brains = new List<Brain>();
+            var brains = new List<Brain>();
             var transform = academy.transform;
 
             for (var i = 0; i < transform.childCount; i++)

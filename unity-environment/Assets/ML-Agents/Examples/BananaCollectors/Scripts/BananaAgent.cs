@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using MLAgents;
 
 public class BananaAgent : Agent
@@ -36,7 +34,7 @@ public class BananaAgent : Agent
     {
         base.InitializeAgent();
         agentRb = GetComponent<Rigidbody>();
-        Monitor.verticalOffset = 1f;
+        Monitor.VerticalOffset = 1f;
         myArea = area.GetComponent<BananaArea>();
         rayPer = GetComponent<RayPerception>();
         myAcademy = myAcademyObj.GetComponent<BananaAcademy>();
@@ -46,11 +44,11 @@ public class BananaAgent : Agent
     {
         if (useVectorObs)
         {
-            float rayDistance = 50f;
+            var rayDistance = 50f;
             float[] rayAngles = { 20f, 90f, 160f, 45f, 135f, 70f, 110f };
             string[] detectableObjects = { "banana", "agent", "wall", "badBanana", "frozenAgent" };
             AddVectorObs(rayPer.Perceive(rayDistance, rayAngles, detectableObjects, 0f, 0f));
-            Vector3 localVelocity = transform.InverseTransformDirection(agentRb.velocity);
+            var localVelocity = transform.InverseTransformDirection(agentRb.velocity);
             AddVectorObs(localVelocity.x);
             AddVectorObs(localVelocity.z);
             AddVectorObs(System.Convert.ToInt32(frozen));
@@ -60,9 +58,9 @@ public class BananaAgent : Agent
 
     public Color32 ToColor(int hexVal)
     {
-        byte r = (byte)((hexVal >> 16) & 0xFF);
-        byte g = (byte)((hexVal >> 8) & 0xFF);
-        byte b = (byte)(hexVal & 0xFF);
+        var r = (byte)((hexVal >> 16) & 0xFF);
+        var g = (byte)((hexVal >> 8) & 0xFF);
+        var b = (byte)(hexVal & 0xFF);
         return new Color32(r, g, b, 255);
     }
 
@@ -86,12 +84,12 @@ public class BananaAgent : Agent
             }
         }
 
-        Vector3 dirToGo = Vector3.zero;
-        Vector3 rotateDir = Vector3.zero;
+        var dirToGo = Vector3.zero;
+        var rotateDir = Vector3.zero;
 
         if (!frozen)
         {
-            bool shootCommand = false;
+            var shootCommand = false;
             if (brain.brainParameters.vectorActionSpaceType == SpaceType.continuous)
             {
                 dirToGo = transform.forward * Mathf.Clamp(act[0], -1f, 1f);
@@ -134,7 +132,7 @@ public class BananaAgent : Agent
         if (shoot)
         {
             myLaser.transform.localScale = new Vector3(1f, 1f, 1f);
-            Vector3 position = transform.TransformDirection(RayPerception.PolarToCartesian(25f, 90f));
+            var position = transform.TransformDirection(RayPerception.PolarToCartesian(25f, 90f));
             Debug.DrawRay(transform.position, position, Color.red, 0f, true);
             RaycastHit hit;
             if (Physics.SphereCast(transform.position, 2f, position, out hit, 25f))

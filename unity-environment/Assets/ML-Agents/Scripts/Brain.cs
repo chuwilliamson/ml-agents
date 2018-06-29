@@ -1,9 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-
-using System.Linq;
 
 
 namespace MLAgents
@@ -126,7 +122,7 @@ namespace MLAgents
             // instanciated and we create instances of each CoreBrain
             if (CoreBrains == null)
             {
-                int numCoreBrains = System.Enum.GetValues(typeof(BrainType)).Length;
+                var numCoreBrains = System.Enum.GetValues(typeof(BrainType)).Length;
                 CoreBrains = new ScriptableObject[numCoreBrains];
                 foreach (BrainType bt in System.Enum.GetValues(typeof(BrainType)))
                 {
@@ -155,8 +151,8 @@ namespace MLAgents
             // we increase the length of CoreBrains
             if (CoreBrains.Length < System.Enum.GetValues(typeof(BrainType)).Length)
             {
-                int numCoreBrains = System.Enum.GetValues(typeof(BrainType)).Length;
-                ScriptableObject[] new_CoreBrains =
+                var numCoreBrains = System.Enum.GetValues(typeof(BrainType)).Length;
+                var new_CoreBrains =
                     new ScriptableObject[numCoreBrains];
                 foreach (BrainType bt in System.Enum.GetValues(typeof(BrainType)))
                 {

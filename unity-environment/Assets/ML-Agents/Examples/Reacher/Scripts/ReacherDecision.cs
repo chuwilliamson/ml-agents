@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using MLAgents;
 
@@ -7,8 +6,8 @@ public class ReacherDecision : MonoBehaviour, Decision {
 
     public float[] Decide (List<float> state, List<Texture2D> observation, float reward, bool done, List<float> memory)
     {
-        float[] action = new float[4];
-        for (int i = 0; i < 4; i++) {
+        var action = new float[4];
+        for (var i = 0; i < 4; i++) {
             action[i] = Random.Range(-1f, 1f);
         }
         return action;

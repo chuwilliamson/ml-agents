@@ -175,7 +175,7 @@ namespace MLAgents
                 Done = info.done,
                 Id = info.id,
             };
-            foreach (Texture2D obs in info.visualObservations)
+            foreach (var obs in info.visualObservations)
             {
                 agentInfoProto.VisualObservations.Add(
                     ByteString.CopyFrom(obs.EncodeToJPG())
@@ -209,7 +209,7 @@ namespace MLAgents
                 };
             brainParametersProto.VectorActionDescriptions.AddRange(
                 brainParameters.vectorActionDescriptions);
-            foreach (resolution res in brainParameters.cameraResolutions)
+            foreach (var res in brainParameters.cameraResolutions)
             {
                 brainParametersProto.CameraResolutions.Add(
                     new CommunicatorObjects.ResolutionProto
@@ -245,7 +245,7 @@ namespace MLAgents
             m_hasQueried[brainKey] = true;
             // Populate the currentAgents dictionary
             m_currentAgents[brainKey].Clear();
-            foreach (Agent agent in agentInfo.Keys)
+            foreach (var agent in agentInfo.Keys)
             {
                 m_currentAgents[brainKey].Add(agent);
             }
@@ -253,9 +253,9 @@ namespace MLAgents
             // the message and update hasSentState
             if (m_currentAgents[brainKey].Count > 0)
             {
-                foreach (Agent agent in m_currentAgents[brainKey])
+                foreach (var agent in m_currentAgents[brainKey])
                 {
-                    CommunicatorObjects.AgentInfoProto agentInfoProto =
+                    var agentInfoProto =
                         AgentInfoConvertor(agentInfo[agent]);
                     m_currentUnityRLOutput.AgentInfos[brainKey].Value.Add(agentInfoProto);
                 }
@@ -273,7 +273,7 @@ namespace MLAgents
                 }
                 // The message was just sent so we must reset hasSentState and
                 // triedSendState
-                foreach (string k in m_currentAgents.Keys)
+                foreach (var k in m_currentAgents.Keys)
                 {
                     m_hasData[k] = false;
                     m_hasQueried[k] = false;
@@ -293,7 +293,7 @@ namespace MLAgents
             });
             m_messagesReceived += 1;
 
-            foreach (string k in m_currentUnityRLOutput.AgentInfos.Keys)
+            foreach (var k in m_currentUnityRLOutput.AgentInfos.Keys)
             {
                 m_currentUnityRLOutput.AgentInfos[k].Value.Clear();
             }
@@ -303,7 +303,7 @@ namespace MLAgents
                 return;
             }
 
-            CommunicatorObjects.UnityRLInput rlInput = input.RlInput;
+            var rlInput = input.RlInput;
 
             if (rlInput == null)
             {

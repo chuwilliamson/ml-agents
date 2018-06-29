@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -93,10 +92,10 @@ namespace MLAgents
 
             if (brain.brainParameters.vectorActionSpaceType == SpaceType.continuous)
             {
-                foreach (Agent agent in agentInfo.Keys)
+                foreach (var agent in agentInfo.Keys)
                 {
                     var action = new float[brain.brainParameters.vectorActionSize];
-                    foreach (KeyContinuousPlayerAction cha in keyContinuousPlayerActions)
+                    foreach (var cha in keyContinuousPlayerActions)
                         {
                             if (Input.GetKey(cha.key))
                             {
@@ -105,7 +104,7 @@ namespace MLAgents
                         }
     
 
-                    foreach (AxisContinuousPlayerAction axisAction in axisContinuousPlayerActions)
+                    foreach (var axisAction in axisContinuousPlayerActions)
                     {
                         var axisValue = Input.GetAxis(axisAction.axis);
                         axisValue *= axisAction.scale;
@@ -119,10 +118,10 @@ namespace MLAgents
             }
             else
             {
-                foreach (Agent agent in agentInfo.Keys)
+                foreach (var agent in agentInfo.Keys)
                 {
                     var action = new float[1] {defaultAction};
-                    foreach (DiscretePlayerAction dha in discretePlayerActions)
+                    foreach (var dha in discretePlayerActions)
                     {
                         if (Input.GetKey(dha.key))
                         {
@@ -165,7 +164,7 @@ namespace MLAgents
             {
                 axisContinuousPlayerActions = new AxisContinuousPlayerAction[0];
             }
-            foreach (KeyContinuousPlayerAction action in keyContinuousPlayerActions)
+            foreach (var action in keyContinuousPlayerActions)
             {
                 if (action.index >= brain.brainParameters.vectorActionSize)
                 {
@@ -178,7 +177,7 @@ namespace MLAgents
                         MessageType.Error);
                 }
             }
-            foreach (AxisContinuousPlayerAction action in axisContinuousPlayerActions)
+            foreach (var action in axisContinuousPlayerActions)
             {
                 if (action .index >= brain.brainParameters.vectorActionSize)
                 {

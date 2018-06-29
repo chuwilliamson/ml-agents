@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using MLAgents;
 
 [RequireComponent(typeof(JointDriveController))] // Required to set joint forces
@@ -94,7 +92,7 @@ public class CrawlerAgent : Agent
 
         if (bp.rb.transform != body)
         {
-            Vector3 localPosRelToBody = body.InverseTransformPoint(rb.position);
+            var localPosRelToBody = body.InverseTransformPoint(rb.position);
             AddVectorObs(localPosRelToBody);
             AddVectorObs(bp.currentXNormalizedRot); // Current x rot
             AddVectorObs(bp.currentYNormalizedRot); // Current y rot
@@ -136,7 +134,7 @@ public class CrawlerAgent : Agent
     /// </summary>
     public void GetRandomTargetPos()
     {
-        Vector3 newTargetPos = Random.insideUnitSphere * targetSpawnRadius;
+        var newTargetPos = Random.insideUnitSphere * targetSpawnRadius;
         newTargetPos.y = 5;
         target.position = newTargetPos + ground.position;
     }
@@ -181,7 +179,7 @@ public class CrawlerAgent : Agent
             // The dictionary with all the body parts in it are in the jdController
             var bpDict = jdController.bodyPartsDict;
 
-            int i = -1;
+            var i = -1;
             // Pick a new target joint rotation
             bpDict[leg0Upper].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], 0);
             bpDict[leg1Upper].SetJointTargetRotation(vectorAction[++i], vectorAction[++i], 0);

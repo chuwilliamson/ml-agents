@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using MLAgents;
 
 public class WalkerAcademy : Academy
 {
     public override void InitializeAcademy()
     {
-        Monitor.verticalOffset = 1f;
+        Monitor.VerticalOffset = 1f;
 
         // We increase the Physics solver iterations in order to
         // make walker joint calculations more accurate.

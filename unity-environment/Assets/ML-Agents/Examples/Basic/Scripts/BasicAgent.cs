@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using MLAgents;
 
@@ -31,7 +29,7 @@ public class BasicAgent : Agent
 	{
         var movement = (int)vectorAction[0];
 	    
-		int direction = 0;
+		var direction = 0;
 	    
 		switch (movement)
 		{

@@ -65,7 +65,7 @@ public class SoccerFieldArea : MonoBehaviour
         ballController = ball.GetComponent<SoccerBallController>();
         ballController.area = this;
         ballStartingPos = ball.transform.position;
-        Mesh mesh = ground.GetComponent<MeshFilter>().mesh;
+        var mesh = ground.GetComponent<MeshFilter>().mesh;
     }
 
     IEnumerator ShowGoalUI()
@@ -77,7 +77,7 @@ public class SoccerFieldArea : MonoBehaviour
 
     public void AllPlayersDone(float reward)
     {
-        foreach (PlayerState ps in playerStates)
+        foreach (var ps in playerStates)
         {
             if (ps.agentScript.gameObject.activeInHierarchy)
             {
@@ -93,7 +93,7 @@ public class SoccerFieldArea : MonoBehaviour
 
     public void GoalTouched(AgentSoccer.Team scoredTeam)
     {
-        foreach (PlayerState ps in playerStates)
+        foreach (var ps in playerStates)
         {
             if (ps.agentScript.team == scoredTeam)
             {
@@ -139,8 +139,8 @@ public class SoccerFieldArea : MonoBehaviour
 
     public Vector3 GetRandomSpawnPos(string type, string position)
     {
-        Vector3 randomSpawnPos = Vector3.zero;
-        float xOffset = 0f;
+        var randomSpawnPos = Vector3.zero;
+        var xOffset = 0f;
         if (type == "red")
         {
             if (position == "goalie")

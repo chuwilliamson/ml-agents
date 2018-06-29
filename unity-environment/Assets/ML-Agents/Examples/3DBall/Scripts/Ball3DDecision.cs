@@ -16,7 +16,7 @@ public class Ball3DDecision : MonoBehaviour, Decision
         if (gameObject.GetComponent<Brain>().brainParameters.vectorActionSpaceType
             == SpaceType.continuous)
         {
-            List<float> act = new List<float>();
+            var act = new List<float>();
 
             // state[5] is the velocity of the ball in the x orientation. 
             // We use this number to control the Platform's z axis rotation speed, 

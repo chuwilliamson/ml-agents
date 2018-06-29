@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MLAgents
 {
@@ -48,7 +46,7 @@ namespace MLAgents
             }
 
             Monitor.Log("Recording experiences " + recordKey, recordExperiences.ToString());
-            float timeSinceBufferReset = Time.time - bufferResetTime;
+            var timeSinceBufferReset = Time.time - bufferResetTime;
             Monitor.Log("Seconds since buffer reset " + resetKey, 
                 Mathf.FloorToInt(timeSinceBufferReset).ToString());
         }

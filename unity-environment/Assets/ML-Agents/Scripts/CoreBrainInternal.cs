@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 #if UNITY_EDITOR
@@ -553,24 +552,24 @@ namespace MLAgents
         public static float[,,,] BatchVisualObservations(
             List<Texture2D> textures, bool blackAndWhite)
         {
-            int batchSize = textures.Count();
-            int width = textures[0].width;
-            int height = textures[0].height;
-            int pixels = 0;
+            var batchSize = textures.Count();
+            var width = textures[0].width;
+            var height = textures[0].height;
+            var pixels = 0;
             if (blackAndWhite)
                 pixels = 1;
             else
                 pixels = 3;
-            float[,,,] result = new float[batchSize, height, width, pixels];
+            var result = new float[batchSize, height, width, pixels];
 
-            for (int b = 0; b < batchSize; b++)
+            for (var b = 0; b < batchSize; b++)
             {
-                Color32[] cc = textures[b].GetPixels32();
-                for (int w = 0; w < width; w++)
+                var cc = textures[b].GetPixels32();
+                for (var w = 0; w < width; w++)
                 {
-                    for (int h = 0; h < height; h++)
+                    for (var h = 0; h < height; h++)
                     {
-                        Color32 currentPixel = cc[h * width + w];
+                        var currentPixel = cc[h * width + w];
                         if (!blackAndWhite)
                         {
                             // For Color32, the r, g and b values are between
